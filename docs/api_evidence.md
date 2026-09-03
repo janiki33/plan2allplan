@@ -27,3 +27,9 @@ Abkürzung für lokale Klone in dieser Session:
 
 Die Belege der drei Research-Agenten werden nach Abschluss der Recherche hier eingegliedert
 (Abschnitte «Allplan», «IFC», «Extraktion»).
+
+### Extraktion (ezdxf/pymupdf/opencv/shapely)
+
+Vollständige Quellentabelle (ezdxf, pymupdf, opencv, shapely, SIA-Layer, Stand der Technik) und
+Recherchebericht: siehe `docs/evidence_extraction.md` bzw. `docs/research_extraction.md`
+(research-extraction-Agent, 2026-09-03).
