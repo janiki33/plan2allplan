@@ -13,15 +13,15 @@ Abkürzung für lokale Klone in dieser Session:
 
 | Symbol | Quelle | gefundene Signatur | Datum |
 |---|---|---|---|
-| `check_allplan_version(build_ele, version)` | EX/PythonPartsExampleScripts/ToolsAndStartExamples/HelloWorld.py:17 | `def check_allplan_version(_build_ele: BuildingElement, _version: str)` → bool | 2026-09-03 |
-| `create_element(build_ele, doc)` | EX/PythonPartsExampleScripts/ToolsAndStartExamples/HelloWorld.py:33 | `def create_element(build_ele: BuildingElement, _doc: AllplanElementAdapter.DocumentAdapter)` → `(model_elem_list, handle_list)` | 2026-09-03 |
+| `check_allplan_version(build_ele, version)` | EX/PythonPartsExampleScripts/ToolsAndStartExamples/HelloWorld.py:18 | `def check_allplan_version(_build_ele: BuildingElement, _version: str)` → bool | 2026-09-03 |
+| `create_element(build_ele, doc)` | EX/PythonPartsExampleScripts/ToolsAndStartExamples/HelloWorld.py:35 | `def create_element(build_ele: BuildingElement, _doc: AllplanElementAdapter.DocumentAdapter)` → `(model_elem_list, handle_list)` | 2026-09-03 |
 | `BuildingElement` | EX/PythonPartsExampleScripts/ToolsAndStartExamples/HelloWorld.py:11 | `from BuildingElement import BuildingElement`; Parameterzugriff `build_ele.Length.value` | 2026-09-03 |
-| `NemAll_Python_Geometry.Line2D` | EX/…/HelloWorld.py:51 | `AllplanGeo.Line2D(0, 0, length, 0)` | 2026-09-03 |
-| `NemAll_Python_AllplanSettings.AllplanGlobalSettings.GetCurrentCommonProperties` | EX/…/HelloWorld.py:56 | `AllplanSettings.AllplanGlobalSettings.GetCurrentCommonProperties()` | 2026-09-03 |
-| `NemAll_Python_BasisElements.ModelElement2D` | EX/…/HelloWorld.py:61 | `AllplanBasisElements.ModelElement2D(common_props, line)` | 2026-09-03 |
-| `NemAll_Python_IFW_ElementAdapter.DocumentAdapter` | EX/…/HelloWorld.py:34 | Typ des `doc`-Arguments von `create_element` | 2026-09-03 |
+| `NemAll_Python_Geometry.Line2D` | EX/…/HelloWorld.py:55 | `AllplanGeo.Line2D(0, 0, length, 0)` | 2026-09-03 |
+| `NemAll_Python_AllplanSettings.AllplanGlobalSettings.GetCurrentCommonProperties` | EX/…/HelloWorld.py:60 | `AllplanSettings.AllplanGlobalSettings.GetCurrentCommonProperties()` | 2026-09-03 |
+| `NemAll_Python_BasisElements.ModelElement2D` | EX/…/HelloWorld.py:65 | `AllplanBasisElements.ModelElement2D(common_props, line)` | 2026-09-03 |
+| `NemAll_Python_IFW_ElementAdapter.DocumentAdapter` | EX/…/HelloWorld.py:36 | Typ des `doc`-Arguments von `create_element` | 2026-09-03 |
 | `.pyp`-Struktur (`<Script><Name>`, `<Page>`, `<Parameter>` mit `ValueType` Length) | EX/Library/Examples/PythonParts/ToolsAndStartExamples/HelloWorld.pyp | XML nach `https://pythonparts.allplan.com/2026/schemas/PythonPart.xsd` | 2026-09-03 |
-| Paket-Layout (Ordner mit `__init__.py` statt `<Name>.py`) | DOC/manual/key_components/ (File locations); janiki33/allplan-slab-reinforcement PythonPartsScripts/SlabReinforcement/__init__.py | `.pyp` `<Name>Plan2Allplan.py</Name>` → Paket `PythonPartsScripts/Plan2Allplan/__init__.py` exportiert `check_allplan_version`, `create_element` | 2026-09-03 |
+| Skript-Ablage (`<Script><Name>` = Pfad relativ zu `PythonPartsScripts`, Backslash) | EX/Library/Examples/PythonParts/ToolsAndStartExamples/HelloWorld.pyp:4 (`ToolsAndStartExamples\HelloWorld.py`); DOC/manual/key_components/ (File locations, siehe docs/research_allplan.md Abschnitt J) | `.pyp` `<Name>Plan2Allplan\dummy.py</Name>` → `PythonPartsScripts/Plan2Allplan/dummy.py`; `__init__.py` leer wie in den offiziellen Beispielen | 2026-09-03 |
 
 ## Etappe 0 – Recherche-Belege
 

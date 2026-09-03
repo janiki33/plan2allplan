@@ -31,7 +31,9 @@
     -> "My own CAD documents"). Standard aus dem Referenzskript.
 
 .PARAMETER Branch
-    Git-Branch, der gezogen und gepusht wird.
+    Git-Branch, der gezogen und gepusht wird. Ohne Angabe: der aktuell
+    ausgecheckte Branch des Repos (waehrend der Entwicklung der Arbeitsbranch,
+    spaeter main).
 
 .PARAMETER DryRun
     Nur anzeigen, was passieren wuerde; nichts kopieren, nichts committen.
@@ -45,7 +47,7 @@
 [CmdletBinding()]
 param(
     [string] $AllplanUsr = 'J:\Allplan\Usr\Janosch',
-    [string] $Branch     = 'main',
+    [string] $Branch     = '',
     [switch] $DryRun
 )
 
@@ -62,7 +64,11 @@ $SyncDirs = @(
 )
 
 # Nur diese Dateitypen werden gespiegelt.
-$SyncedExtensions = @('.py', '.pyp', '.png', '.incl')
+$SyncedExtensions = @('.py', '.pyp', '.png', '.incl', '.xml')
+
+# Bekannte Grenze: Loeschungen werden nicht propagiert. Eine im Repo geloeschte
+# Datei kommt beim naechsten Lauf aus dem Allplan-Ordner zurueck (und umgekehrt);
+# zum endgueltigen Entfernen die Datei auf beiden Seiten loeschen.
 
 $Summary = [ordered]@{
     ToAllplan = New-Object System.Collections.Generic.List[string]
@@ -92,10 +98,22 @@ function Invoke-Git {
     param([Parameter(Mandatory)][string[]] $Arguments)
     Write-Log ('git ' + ($Arguments -join ' '))
     if ($DryRun -and ($Arguments[0] -in @('add', 'commit', 'push'))) { return '' }
-    $output = & git -C $RepoRoot @Arguments 2>&1
+    # git schreibt Fortschritt routinemaessig nach stderr. Mit
+    # $ErrorActionPreference = 'Stop' wuerde PowerShell 5.1 jede stderr-Zeile
+    # als NativeCommandError werfen, bevor $LASTEXITCODE geprueft ist - deshalb
+    # nur fuer den Aufruf auf 'Continue' schalten und stderr-Records zu Text machen.
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $output = & git -C $RepoRoot @Arguments 2>&1 | ForEach-Object { "$_" }
+        $exit = $LASTEXITCODE
+    }
+    finally {
+        $ErrorActionPreference = $prevEap
+    }
     $text = ($output | Out-String).Trim()
-    if ($LASTEXITCODE -ne 0) {
-        throw "git $($Arguments[0]) fehlgeschlagen (Exit $LASTEXITCODE): $text"
+    if ($exit -ne 0) {
+        throw "git $($Arguments[0]) fehlgeschlagen (Exit $exit): $text"
     }
     if ($text) { Write-Host $text }
     return $text
@@ -227,6 +245,14 @@ if (-not (Test-Path -LiteralPath $AllplanUsr)) {
 if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
     Write-Log 'git wurde nicht gefunden (PATH).' -Level ERROR
     exit 2
+}
+
+if (-not $Branch) {
+    $Branch = Invoke-Git @('rev-parse', '--abbrev-ref', 'HEAD')
+    if (-not $Branch -or $Branch -eq 'HEAD') {
+        Write-Log 'Kein Branch ausgecheckt (detached HEAD) - bitte -Branch angeben.' -Level ERROR
+        exit 2
+    }
 }
 
 Write-Log "Abgleich $RepoRoot@$Branch <-> $AllplanUsr $(if ($DryRun) {'(DryRun)'})"
